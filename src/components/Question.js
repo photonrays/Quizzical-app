@@ -1,15 +1,9 @@
-import React from "react";
-import Button from "./Button";
+import React from "react"
 
-export default function Question(props) {
-    return (
+export default function Questions(props) {
+    return(
         <div className="question-container">
-            <p className="question" dangerouslySetInnerHTML={{ __html:props.question}}/>
-            <Button answer={props.answer[0]}/>
-            <Button answer={props.answer[1]}/>
-            <Button answer={props.answer[2]}/>
-            <Button answer={props.answer[3]}/>
-            <hr/>
+        <p className="question" dangerouslySetInnerHTML={ {__html: props.value} } />
         </div>
     )
 }

@@ -1,82 +1,122 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&family=Karla:wght@300;500;700&display=swap");
 
 *,
-*::before,
-*::after {
+h1 {
   box-sizing: border-box;
-  font-family: Karla, sans-serif;
   margin: 0;
 }
 
 body {
-  margin: 0;
-  padding: 0;
+  background-color: #f5f7fb;
+  background: url("./yellow-blob.svg") no-repeat,
+    url("./blue-blob.svg") no-repeat;
+  background-position: top 0 right 0, bottom 0 left 0;
 }
 
-.container {
+/* fonts  */
+
+h1 {
+  font-family: Karla, sans-serif;
+}
+
+.quiz-description {
+  font-family: Inter, sans-serif;
+}
+
+/* main styling */
+
+.main-container {
   display: flex;
-  height: 100vh;
-  width: 100vw;
   justify-content: center;
-  align-items: center;
+}
+
+main {
+  height: 100vh;
+  color: #293264;
+  max-width: 500px;
+  margin: 40px 0 40px 0;
+}
+
+/* start component */
+
+.start-container {
+  height: 100vh;
+  display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.question-container {
-  /* display: flex; */
+.start-container h1 {
+  padding: 7px;
 }
 
-.question-container p {
-  font-style: normal;
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 19px;
-
-  color: #293264;
-}
-
-.question-btn {
-  font-family: Inter, sans-serif;
-  width: fit-content;
-  height: 20.65px;
-
-  border: 0.794239px solid #4d5b9e;
-  box-sizing: border-box;
-  border-radius: 7.94239px;
-  background-color: white;
-  margin: 12px 12px 15px 0;
+.start-container button {
+  border: none;
+  background: #4d5b9e;
+  color: white;
+  padding: 15px 50px;
+  border-radius: 15px;
+  margin: 30px;
   cursor: pointer;
+}
+
+/* question component */
+
+.question {
+  font-weight: bold;
+}
+
+.option {
+  font-size: 10px;
+  font-family: "Inter", sans-serif;
+  background: transparent;
+  border: 1px solid #293264;
   color: #293264;
-  text-align: center;
-  font-weight: 500;
-  font-size: 10.24px;
-  line-height: 12px;
+  margin: 12px 12px 2px 0;
+  border-radius: 8px;
+  padding: 5px 10px;
+  cursor: pointer;
 }
 
-.question-container hr {
-  margin-bottom: 15px;
-  border: 0.794239px solid #dbdef0;
-  transform: rotate(-0.05deg);
+.trivia-item {
+  margin: 15px 0;
+  border-bottom: 1px solid #dbdef0;
+  padding-bottom: 15px;
+}
+/* button component */
+
+.red {
+  background-color: red;
 }
 
-.question-container button:hover {
-  background: #d6dbf5;
-  border-radius: 7.94239px;
-  border: 0.794239px solid #d6dbf5;
-}
-
-.container > button {
-  font-family: Inter, sans-serif;
-  width: 120px;
-  height: 35px;
-
+footer button {
+  color: #f5f7fb;
   background: #4d5b9e;
   border-radius: 10px;
+  font-size: 10px;
   border: none;
-  color: white;
-  text-align: center;
-  font-weight: 500;
-  font-size: 10.24px;
-  line-height: 12px;
+  padding: 10px 20px;
   cursor: pointer;
+}
+
+footer {
+  text-align: center;
+}
+
+.final-score {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.final-score p {
+  font-family: "Inter", sans-serif;
+  color: #293264;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.trivia-options {
+  display: inline;
 }

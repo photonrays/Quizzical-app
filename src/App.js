@@ -1,52 +1,111 @@
 import React from "react"
-import Question from "./components/Question"
 import { nanoid } from 'nanoid'
+import Start from "./components/Start"
+import Question from "./components/Question"
+import Button from "./components/Button"
+import TriviaPage from "./components/TriviaPage"
+
 
 export default function App() {
+    const [gameStarted, setGameStarted] = React.useState(false);
 
-    //create list of question data
-    const [quizData, setQuizData] = React.useState([])
+    const [trivia, setTrivia] = React.useState([]);
 
-    const API_URL = "https://opentdb.com/api.php?amount=5&category=31&type=multiple"
 
-    function shuffleArray(arr) {
-        const shuffledArray = arr.sort((a, b) => 0.5 - Math.random());
-        return shuffledArray;
+    const [correctCount, setCorrectCount] = React.useState(0);
+
+
+    const [checkingAnswers, setCheckingAnswers] = React.useState(false);
+
+    
+    function startQuiz() {
+        setGameStarted(true)
     }
-
+    
+    function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+    
+    // fetch api once game starts
     React.useEffect(() => {
-        fetch(API_URL)
-            .then(response => response.json())
-            .then(data => setQuizData(data.results.map(quiz => {
+        fetch('https://opentdb.com/api.php?amount=5&type=multiple')
+            .then(res => res.json())
+            .then(data => setTrivia(data.results.map(triviaItem => {
                 return {
-                    question: quiz.question,
-                    correct: quiz.correct_answer,
-                    answer: shuffleArray([...quiz.incorrect_answers, quiz.correct_answer]),
-                    id: nanoid(),
-                    userChoice: ""
+                    question: triviaItem.question,
+                    correct: triviaItem.correct_answer,
+                    answers: shuffle([triviaItem.correct_answer, ...triviaItem.incorrect_answers]),
+                    userChoice: "",
+                    id: nanoid()
                 }
-            })));
-    }, [])
+            })))
+    }, [gameStarted])
+    
 
-    console.log(quizData)
-
-    const questionElement = quizData.map(quiz => {
+    // render buttons and question on the page
+    const renderTrivia = trivia.map(triviaItem => {
+        const answerButtons = triviaItem.answers.map((answer, index) => (
+            <Button 
+                isChecking={checkingAnswers}
+                key={index}
+                value={answer}
+                triviaItem={triviaItem}
+                clickButton={() => clickButton(triviaItem.id, answer)} 
+            />
+            ))
         return (
-            <Question 
-                question={quiz.question}
-                answer={quiz.answer}
-        />       
+            <div className="trivia-item">
+                <Question 
+                    value={triviaItem.question} 
+                    key={triviaItem.id}
+                />
+                {answerButtons}
+            </div>
         )
     })
 
-    return quizData.length > 0 ? ( 
-        <div className="container">
-            <div>
-                {questionElement}
-            </div>
-            <button>Check answers</button>         
-        </div> 
-        ) : (
-        <h2 className="container">Loading...</h2>
+    function clickButton(id, value) {
+        const mappedData = trivia.map(triviaItem => (
+                triviaItem.id === id ? 
+                {...triviaItem, userChoice: value}
+                : triviaItem 
+            )
+        )
+        
+        setTrivia([...mappedData])
+
+    }
+    
+    function checkAnswers() {
+        trivia.map(triviaItem => {
+            triviaItem.correct === triviaItem.userChoice ? 
+                setCorrectCount(prevCount => prevCount + 1) : console.log(false)
+        })
+        setCheckingAnswers(true)
+    }
+    
+    
+    function playAgain() {
+        setGameStarted(false)
+        setCheckingAnswers(false)
+    }
+
+
+    return(
+        <div className="main-container">
+            <main>{gameStarted ? 
+                    <TriviaPage
+                        renderTrivia={renderTrivia}
+                        checkAnswers={checkAnswers}
+                        isChecking={checkingAnswers} 
+                        correctCount={correctCount} 
+                        playAgain={playAgain}/> : 
+                    <Start handleClick={startQuiz} />}
+            </main>
+        </div>
     )
 }
